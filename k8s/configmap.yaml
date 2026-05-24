@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: casgarage-config
+  namespace: casgarage
+data:
+  RUST_LOG: "info"
+  CASGARAGE_LOG_LEVEL: "info"
+  CASGARAGE_REPLICATION_FACTOR: "3"

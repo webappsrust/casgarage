@@ -1,0 +1,72 @@
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Build artifacts
+target/
+binaries/
+releases/
+dist/
+frontend/dist/
+frontend/target/
+frontend/pkg/
+
+# Dependencies
+node_modules/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and databases
+*.log
+*.db
+*.sqlite
+*.sqlite3
+/var/
+
+# Documentation (include only CLAUDE.md)
+docs/
+README.md
+CONTRIBUTING.md
+LICENSE
+TODO.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# Development and testing
+.env
+.env.local
+*.local
+tests/dev.sh
+tests/test.sh
+
+# Docker files (don't include in image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Temporary and cache
+/tmp/
+*.tmp
+*.temp
+.cache/
+/rootfs/
+
+# Test coverage
+coverage/
+tarpaulin-report.html
+cobertura.xml

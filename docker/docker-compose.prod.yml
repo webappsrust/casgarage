@@ -1,0 +1,97 @@
+# Production docker-compose configuration
+# 3-node cluster setup
+version: '3.8'
+
+services:
+  casgarage-node1:
+    image: casapps/casgarage:latest
+    container_name: casgarage-node1
+    ports:
+      - "3900:3900"
+      - "3901:3901"
+      - "9090:9090"
+    volumes:
+      - node1-data:/data/casgarage
+      - node1-tmp:/tmp/casgarage
+    environment:
+      - CASGARAGE_NODE_ID=node1
+      - CASGARAGE_BOOTSTRAP_PEERS=casgarage-node2:3900,casgarage-node3:3900
+      - CASGARAGE_REPLICATION_FACTOR=3
+      - RUST_LOG=info
+      - TMPDIR=/tmp/casgarage
+    restart: unless-stopped
+    healthcheck:
+      test: [" CMD", "/usr/local/bin/casgarage", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - casgarage-cluster
+
+  casgarage-node2:
+    image: casapps/casgarage:latest
+    container_name: casgarage-node2
+    ports:
+      - "4900:3900"
+      - "4901:3901"
+      - "9091:9090"
+    volumes:
+      - node2-data:/data/casgarage
+      - node2-tmp:/tmp/casgarage
+    environment:
+      - CASGARAGE_NODE_ID=node2
+      - CASGARAGE_BOOTSTRAP_PEERS=casgarage-node1:3900,casgarage-node3:3900
+      - CASGARAGE_REPLICATION_FACTOR=3
+      - RUST_LOG=info
+      - TMPDIR=/tmp/casgarage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/casgarage", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - casgarage-cluster
+
+  casgarage-node3:
+    image: casapps/casgarage:latest
+    container_name: casgarage-node3
+    ports:
+      - "5900:3900"
+      - "5901:3901"
+      - "9092:9090"
+    volumes:
+      - node3-data:/data/casgarage
+      - node3-tmp:/tmp/casgarage
+    environment:
+      - CASGARAGE_NODE_ID=node3
+      - CASGARAGE_BOOTSTRAP_PEERS=casgarage-node1:3900,casgarage-node2:3900
+      - CASGARAGE_REPLICATION_FACTOR=3
+      - RUST_LOG=info
+      - TMPDIR=/tmp/casgarage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/casgarage", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - casgarage-cluster
+
+volumes:
+  node1-data:
+    driver: local
+  node1-tmp:
+    driver: local
+  node2-data:
+    driver: local
+  node2-tmp:
+    driver: local
+  node3-data:
+    driver: local
+  node3-tmp:
+    driver: local
+
+networks:
+  casgarage-cluster:
+    driver: bridge

@@ -1,0 +1,82 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+*.pdb
+
+# Build outputs
+/binaries/
+/releases/
+/dist/
+
+# Frontend build
+frontend/dist/
+frontend/target/
+frontend/pkg/
+node_modules/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+/var/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+.project
+.classpath
+.settings/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# Docker volumes
+/rootfs/
+
+# Test coverage
+tarpaulin-report.html
+cobertura.xml
+coverage/
+*.profraw
+*.profdata
+
+# Editor backups
+*~
+\#*\#
+.#*
+
+# Project-specific temporary directory
+/tmp/casgarage/
+
+# Cache
+.cache/
+*.cache
+
+# Lock files (keep Cargo.lock for binary crates)
+# Cargo.lock is tracked for applications

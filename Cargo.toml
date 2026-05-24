@@ -1,0 +1,223 @@
+[workspace]
+members = [
+    ".",
+    "frontend",
+]
+resolver = "2"
+
+[package]
+name = "casgarage"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jason Hempstead (casjay) <casjay@yahoo.com>"]
+license = "MIT"
+description = "Self-hosted S3-compatible object storage with administrative web UI"
+repository = "https://github.com/casapps/casgarage"
+homepage = "https://casgarage.readthedocs.io"
+documentation = "https://casgarage.readthedocs.io"
+keywords = ["s3", "object-storage", "garage", "self-hosted", "storage"]
+categories = ["command-line-utilities", "web-programming", "filesystem"]
+rust-version = "1.83"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.41", features = ["full", "tracing"] }
+tokio-util = { version = "0.7", features = ["full"] }
+tokio-stream = "0.1"
+
+# Web framework
+axum = { version = "0.7", features = ["multipart", "ws", "macros", "json"] }
+axum-extra = { version = "0.9", features = ["typed-header", "cookie", "query"] }
+tower = { version = "0.5", features = ["full"] }
+tower-http = { version = "0.6", features = ["fs", "trace", "cors", "compression-full", "timeout", "limit"] }
+hyper = { version = "1.5", features = ["full", "server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["full"] }
+
+# Database - Multi-database support
+sqlx = { version = "0.8", features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "sqlite",
+    "postgres",
+    "mysql",
+    "macros",
+    "migrate",
+    "json",
+    "chrono",
+    "uuid"
+] }
+rusqlite = { version = "0.32", features = ["bundled", "backup", "blob", "chrono", "uuid"] }
+tokio-rusqlite = "0.6"
+
+# Redis/Valkey support (optional)
+redis = { version = "0.27", features = ["tokio-comp", "connection-manager", "aio"], optional = true }
+
+# Serialization
+serde = { version = "1.0", features = ["derive", "rc"] }
+serde_json = { version = "1.0", features = ["raw_value"] }
+serde_yaml = "0.9"
+toml = { version = "0.8", features = ["parse", "display"] }
+bincode = "1.3"
+
+# S3 compatibility
+aws-sdk-s3 = "1.67"
+aws-config = "1.5"
+aws-credential-types = "1.2"
+
+# ACME / Let's Encrypt
+instant-acme = "0.7"
+rcgen = "0.13"
+rustls-pemfile = "2.2"
+
+# Crypto and security
+argon2 = { version = "0.5", features = ["std"] }
+jsonwebtoken = "9.3"
+ring = "0.17"
+rustls = { version = "0.23", features = ["std", "ring"] }
+tokio-rustls = "0.26"
+rustls-native-certs = "0.8"
+uuid = { version = "1.11", features = ["v4", "v7", "serde", "fast-rng"] }
+rand = { version = "0.8", features = ["std", "std_rng"] }
+sha2 = "0.10"
+md5 = "0.7"
+hex = "0.4"
+base64 = "0.22"
+bcrypt = "0.15"
+
+# CLI
+clap = { version = "4.5", features = ["derive", "env", "string", "wrap_help", "cargo"] }
+indicatif = { version = "0.17", features = ["tokio"] }
+console = "0.15"
+comfy-table = "7.1"
+
+# Logging and tracing
+tracing = { version = "0.1", features = ["attributes", "log"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "ansi", "time"] }
+tracing-appender = "0.2"
+tracing-log = "0.2"
+
+# Monitoring
+prometheus = { version = "0.13", features = ["process"] }
+sysinfo = "0.32"
+
+# Scheduler
+tokio-cron-scheduler = { version = "0.13", features = ["signal"] }
+
+# GraphQL (optional)
+async-graphql = { version = "7.0", features = ["apollo_tracing", "chrono", "uuid"], optional = true }
+async-graphql-axum = { version = "7.0", optional = true }
+
+# Utilities
+anyhow = "1.0"
+thiserror = "1.0"
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde", "clock"] }
+regex = "1.11"
+humantime = "2.1"
+humantime-serde = "1.1"
+bytes = "1.8"
+futures = "0.3"
+futures-util = "0.3"
+pin-project = "1.1"
+once_cell = "1.20"
+parking_lot = "0.12"
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "cookies", "gzip"] }
+
+# Templating (for HTML responses)
+askama = { version = "0.12", features = ["with-axum"] }
+askama_axum = "0.4"
+
+# Garage storage engine (will be added once we fork/integrate)
+# For now, we'll build our own S3-compatible layer
+# garage = { path = "../garage" }
+
+# Frontend embedding
+rust-embed = { version = "8.5", features = ["compression", "interpolate-folder-path"] }
+mime_guess = "2.0"
+mime = "0.3"
+
+# File system utilities
+walkdir = "2.5"
+notify = "6.1"
+tempfile = "3.14"
+
+# Network utilities
+local-ip-address = "0.6"
+if-addrs = "0.13"
+get-port = "4.0"
+hostname = "0.4"
+
+# System utilities
+nix = { version = "0.29", features = ["signal", "user"] }
+libc = "0.2"
+
+# Configuration management
+config = { version = "0.14", features = ["toml", "json", "yaml"], default-features = false }
+
+# Email (for notifications)
+lettre = { version = "0.11", features = ["tokio1-rustls-tls", "smtp-transport"], optional = true }
+
+# Webhook support
+webhook = { version = "2.1", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.13"
+proptest = "1.5"
+criterion = { version = "0.5", features = ["async_tokio"] }
+tempfile = "3.14"
+rstest = "0.23"
+serial_test = "3.2"
+wiremock = "0.6"
+
+[profile.release]
+opt-level = "z"          # Optimize for size
+lto = true               # Link-time optimization
+codegen-units = 1        # Better optimization
+strip = true             # Strip symbols
+panic = "abort"          # Smaller binary
+
+[profile.release-fast]
+inherits = "release"
+opt-level = 3            # Optimize for speed over size
+
+[profile.dev]
+opt-level = 0
+debug = true
+incremental = true
+
+[profile.test]
+opt-level = 1
+debug = true
+
+[[bin]]
+name = "casgarage"
+path = "src/main.rs"
+
+[lib]
+name = "casgarage"
+path = "src/lib.rs"
+
+[features]
+default = ["sqlite"]
+# Database backends
+sqlite = []
+postgres = []
+mysql = []
+valkey = ["redis"]
+all-databases = ["sqlite", "postgres", "mysql", "valkey"]
+
+# Optional features
+graphql = ["async-graphql", "async-graphql-axum"]
+email = ["lettre"]
+webhooks = ["webhook"]
+full = ["all-databases", "graphql", "email", "webhooks"]
+
+# Development features
+dev = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

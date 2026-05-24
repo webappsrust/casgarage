@@ -1,0 +1,31 @@
+# Development Dockerfile with hot reload
+FROM rust:1.83-slim
+
+WORKDIR /app
+
+# Install development dependencies
+RUN apt-get update && \
+    apt-get install -y \
+        pkg-config \
+        libssl-dev \
+        curl \
+        && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install development tools
+RUN cargo install cargo-watch trunk && \
+    rustup target add wasm32-unknown-unknown
+
+# Create directories
+RUN mkdir -p /tmp/casgarage /data/casgarage/{blocks,db}
+
+# Expose ports
+EXPOSE 3900 3901 8080 9090
+
+# Set environment variables
+ENV CASGARAGE_DATABASE=/data/casgarage/db/casgarage.db
+ENV CASGARAGE_DATA_DIR=/data/casgarage/blocks
+ENV RUST_LOG=debug
+ENV TMPDIR=/tmp/casgarage
+
+CMD ["./scripts/dev.sh"]

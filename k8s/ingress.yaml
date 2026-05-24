@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: casgarage-ingress
+  namespace: casgarage
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - casgarage.example.com
+    - s3.casgarage.example.com
+    secretName: casgarage-tls
+  rules:
+  - host: casgarage.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: casgarage-admin
+            port:
+              number: 3900
+  - host: s3.casgarage.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: casgarage-s3
+            port:
+              number: 3901

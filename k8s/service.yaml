@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: casgarage-admin
+  namespace: casgarage
+  labels:
+    app: casgarage
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3900
+    targetPort: 3900
+    name: admin
+  selector:
+    app: casgarage
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: casgarage-s3
+  namespace: casgarage
+  labels:
+    app: casgarage
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3901
+    targetPort: 3901
+    name: s3
+  selector:
+    app: casgarage
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: casgarage-metrics
+  namespace: casgarage
+  labels:
+    app: casgarage
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  selector:
+    app: casgarage
+
+---
+# Headless service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: casgarage
+  namespace: casgarage
+  labels:
+    app: casgarage
+spec:
+  clusterIP: None
+  ports:
+  - port: 3900
+    name: admin
+  - port: 3901
+    name: s3
+  - port: 9090
+    name: metrics
+  selector:
+    app: casgarage
